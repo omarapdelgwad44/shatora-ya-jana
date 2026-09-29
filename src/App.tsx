@@ -1,16 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { Music, Sparkles, VolumeX } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { Confetti, IntroVeil, Moon, Stars, StringLights } from '@/components/ambience'
 import { Balloons } from '@/components/balloons'
 import { BouncingName } from '@/components/bouncing-name'
 import { Fireworks, type FireworksHandle } from '@/components/fireworks'
 import { Button } from '@/components/ui/button'
-import { createTune } from '@/lib/tune'
 
 export default function App() {
   const fireworks = useRef<FireworksHandle>(null)
-  const tune = useRef(createTune())
-  const [musicOn, setMusicOn] = useState(false)
   const [revealed, setRevealed] = useState(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
@@ -21,20 +18,8 @@ export default function App() {
     return () => window.clearTimeout(id)
   }, [revealed])
 
-  useEffect(() => () => tune.current.stop(), [])
-
   function burst(x: number, y: number, color?: string) {
     fireworks.current?.burst(x, y, color)
-  }
-
-  async function toggleMusic() {
-    if (musicOn) {
-      tune.current.stop()
-      setMusicOn(false)
-      return
-    }
-    await tune.current.start()
-    setMusicOn(true)
   }
 
   return (
@@ -64,7 +49,7 @@ export default function App() {
         <div className="pointer-events-auto">
           <BouncingName onBurst={burst} />
         </div>
-        <p className="hint">دوس في السما والألعاب النارية هتفرقع، أو دوس على بالون أو حرف عشان يرقص</p>
+        <p className="hint">دوس في السما والألعاب النارية هتفرقع، أو دوس على بالون أو على الاسم</p>
       </section>
 
       <div
@@ -73,15 +58,6 @@ export default function App() {
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Button
-            variant="outline"
-            size="lg"
-            className="party-button"
-            onClick={() => void toggleMusic()}
-          >
-            {musicOn ? <VolumeX /> : <Music />}
-            {musicOn ? 'هدي الأغنية' : 'شغّلي الأغنية'}
-          </Button>
           <Button
             variant="outline"
             size="lg"
