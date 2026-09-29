@@ -96,45 +96,59 @@ export function Fireworks({
     }
 
     const burstAt = (x: number, y: number, color = pick(COLORS), power = 1) => {
-      const scale = canvas.clientWidth < 700 ? 0.62 : 1
-      const count = Math.floor(rand(48, 78) * power * scale)
+      const scale = canvas.clientWidth < 700 ? 0.72 : 1
+      sparks.push({
+        x,
+        y,
+        vx: 0,
+        vy: 0,
+        life: 1,
+        max: 0.28,
+        color: '#fff6d0',
+        size: 28 * power,
+        gravity: 0,
+        drag: 1,
+        twinkle: false,
+      })
+      const count = Math.floor(rand(70, 104) * power * scale)
       for (let i = 0; i < count; i += 1) {
         const angle = (Math.PI * 2 * i) / count + rand(-0.08, 0.08)
-        const speed = rand(1.1, 4.8) * power
+        const speed = rand(2.2, 7.4) * power
         const willow = i % 7 === 0
         sparks.push({
           x,
           y,
-          vx: Math.cos(angle) * speed * (willow ? 0.7 : 1),
-          vy: Math.sin(angle) * speed * (willow ? 0.7 : 1),
+          vx: Math.cos(angle) * speed * (willow ? 0.72 : 1),
+          vy: Math.sin(angle) * speed * (willow ? 0.72 : 1),
           life: 1,
-          max: willow ? rand(1.1, 1.5) : rand(0.72, 1.15),
-          color: i % 6 === 0 ? '#fff7d6' : color,
-          size: rand(1.3, 2.7),
-          gravity: willow ? 0.04 : rand(0.012, 0.026),
-          drag: rand(0.984, 0.993),
-          twinkle: Math.random() > 0.72,
+          max: willow ? rand(1.15, 1.6) : rand(0.8, 1.25),
+          color: i % 5 === 0 ? '#fff7d6' : color,
+          size: rand(2.4, 4.6),
+          gravity: willow ? 0.045 : rand(0.014, 0.03),
+          drag: rand(0.986, 0.993),
+          twinkle: Math.random() > 0.7,
         })
       }
       const ring = pick(COLORS)
-      const ringCount = Math.floor(26 * scale)
+      const ringCount = Math.floor(36 * scale)
       for (let i = 0; i < ringCount; i += 1) {
         const angle = (Math.PI * 2 * i) / ringCount
+        const speed = rand(3.4, 4.6) * power
         sparks.push({
           x,
           y,
-          vx: Math.cos(angle) * 2.15 * power,
-          vy: Math.sin(angle) * 2.15 * power,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
           life: 1,
-          max: 0.85,
+          max: 0.95,
           color: ring,
-          size: 1.5,
-          gravity: 0.008,
+          size: 2.6,
+          gravity: 0.01,
           drag: 0.992,
           twinkle: false,
         })
       }
-      if (sparks.length > 650) sparks.splice(0, sparks.length - 650)
+      if (sparks.length > 900) sparks.splice(0, sparks.length - 900)
     }
 
     const launch = () => {
@@ -232,15 +246,20 @@ export function Fireworks({
           sparks.splice(i, 1)
           continue
         }
-        const twinkle = spark.twinkle ? 0.4 + Math.abs(Math.sin(now / 70 + spark.x)) * 0.6 : 1
-        ctx.globalAlpha = Math.max(0, spark.life) * twinkle
+        const twinkle = spark.twinkle ? 0.45 + Math.abs(Math.sin(now / 70 + spark.x)) * 0.55 : 1
+        const alpha = Math.max(0, spark.life) * twinkle
         ctx.fillStyle = spark.color
+        ctx.globalAlpha = alpha * 0.28
         ctx.beginPath()
-        ctx.arc(spark.x, spark.y, spark.size * (0.45 + spark.life), 0, Math.PI * 2)
+        ctx.arc(spark.x, spark.y, spark.size * (1.8 + spark.life), 0, Math.PI * 2)
         ctx.fill()
-        ctx.globalAlpha = Math.max(0, spark.life) * 0.35
+        ctx.globalAlpha = alpha
         ctx.beginPath()
-        ctx.arc(spark.x - spark.vx * 0.7, spark.y - spark.vy * 0.7, spark.size * 0.7, 0, Math.PI * 2)
+        ctx.arc(spark.x, spark.y, spark.size * (0.55 + spark.life * 0.45), 0, Math.PI * 2)
+        ctx.fill()
+        ctx.globalAlpha = alpha * 0.4
+        ctx.beginPath()
+        ctx.arc(spark.x - spark.vx * 0.55, spark.y - spark.vy * 0.55, spark.size * 0.8, 0, Math.PI * 2)
         ctx.fill()
       }
 

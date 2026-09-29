@@ -43,7 +43,7 @@ function Letter({
 
 export function BouncingName({ onBurst }: { onBurst: (x: number, y: number, color: string) => void }) {
   return (
-    <div className="mt-2 flex flex-col items-center gap-1">
+    <div className="mt-2 flex flex-col items-center gap-2">
       <div dir="rtl" className="letter-row font-arabic">
         {ARABIC.map((letter) => (
           <Letter key={letter.ch} {...letter} lang="ar" onBurst={onBurst} />
