@@ -19,6 +19,8 @@ npm run dev
 
 ## GitHub Pages
 
+الصفحة المنشورة: https://omarapdelgwad44.github.io/shatora-ya-jana/
+
 الملفات متجهزة للنشر من GitHub Actions. بعد ما المستودع يبقى على جيت هب:
 
 1. من Settings ثم Pages، خلّي Source على **GitHub Actions**.
